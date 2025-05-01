@@ -118,13 +118,23 @@ CREATE TABLE participation (
     PRIMARY KEY (user_id, event_id)
 );
 
-CREATE TABLE tag_assignment (             -- assignation polymorphe
-    tag_id      INTEGER     REFERENCES tag(tag_id) ON DELETE CASCADE,
-    target_type target_kind NOT NULL,
-    target_id   INTEGER     NOT NULL,
-    PRIMARY KEY (tag_id, target_id, target_type)
-    /* Pour garantir l'intégrité (target_id pointe vers la bonne table),
-       ajoute un trigger ou 3 vues avec INSTEAD OF INSERT/DELETE. */
+/* Remplacement de la table polymorphe tag_assignment par 3 tables spécifiques */
+CREATE TABLE tag_user_assignment (
+    tag_id   INTEGER REFERENCES tag(tag_id) ON DELETE CASCADE,
+    user_id  INTEGER REFERENCES "user"(user_id) ON DELETE CASCADE,
+    PRIMARY KEY (tag_id, user_id)
+);
+
+CREATE TABLE tag_event_assignment (
+    tag_id   INTEGER REFERENCES tag(tag_id) ON DELETE CASCADE,
+    event_id INTEGER REFERENCES event(event_id) ON DELETE CASCADE,
+    PRIMARY KEY (tag_id, event_id)
+);
+
+CREATE TABLE tag_place_assignment (
+    tag_id   INTEGER REFERENCES tag(tag_id) ON DELETE CASCADE,
+    place_id INTEGER REFERENCES place(place_id) ON DELETE CASCADE,
+    PRIMARY KEY (tag_id, place_id)
 );
 
 /* =========================
@@ -189,41 +199,9 @@ BEFORE UPDATE OF canceled_at ON likes
 FOR EACH ROW
 EXECUTE FUNCTION trg_check_subscription_active();
 
-/* ==============================================================================================
-4 TRIGGER: validate the validity of (target_type, target_id) before adding a tag_assignment
-============================================================================================== */
-CREATE OR REPLACE FUNCTION trg_validate_tag_target()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    ok BOOLEAN;
-BEGIN
-    CASE NEW.target_type
-        WHEN 'user'  THEN
-            SELECT TRUE INTO ok FROM "user"  WHERE user_id  = NEW.target_id;
-        WHEN 'event' THEN
-            SELECT TRUE INTO ok FROM event   WHERE event_id = NEW.target_id;
-        WHEN 'place' THEN
-            SELECT TRUE INTO ok FROM place   WHERE place_id = NEW.target_id;
-        ELSE
-            ok := FALSE;
-    END CASE;
 
-    IF NOT FOUND THEN
-        RAISE EXCEPTION
-          'La cible % (id=%) n’’existe pas ou type invalide',
-          NEW.target_type, NEW.target_id;
-    END IF;
-    RETURN NEW;
-END;
-$$;
-
--- 5.2 Déclencheur
-CREATE TRIGGER tg_check_tag_target
-BEFORE INSERT OR UPDATE ON tag_assignment
-FOR EACH ROW
-EXECUTE FUNCTION trg_validate_tag_target();
+DROP FUNCTION IF EXISTS trg_validate_tag_target();
+DROP TRIGGER IF EXISTS tg_check_tag_target ON tag_assignment;
 
 
 /* ================================================================
