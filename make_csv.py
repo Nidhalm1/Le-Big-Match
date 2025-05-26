@@ -327,20 +327,23 @@ with open("CSV/participation.csv", "w", newline="", encoding="utf8") as f:
             rand_ts_this_year(),
         ])
 
-# ────────────────────────────────────────────────────────────
-# 10. TAG ASSIGNMENT
-# ────────────────────────────────────────────────────────────
-with open("CSV/tag_assignment.csv", "w", newline="", encoding="utf8") as f:
-    w = csv.writer(f)
-    w.writerow(["tag_id", "target_type", "target_id"])
-    # Chaque événement reçoit ≥1 tag
+# ───────── 10a. TAG_EVENT_ASSIGNMENT ──────────
+with open("CSV/tag_event_assignment.csv", "w", newline="", encoding="utf8") as f:
+    w = csv.writer(f); w.writerow(["tag_id", "event_id"])
     for ev in events_ids:
-        w.writerow([random.randint(1, N_TAGS), "event", ev])
-    # Tague 10 places et 50 users pour tester le polymorphisme
+        w.writerow([random.randint(1, N_TAGS), ev])
+
+# ───────── 10b. TAG_PLACE_ASSIGNMENT ──────────
+with open("CSV/tag_place_assignment.csv", "w", newline="", encoding="utf8") as f:
+    w = csv.writer(f); w.writerow(["tag_id", "place_id"])
     for pl in random.sample(places_ids, 10):
-        w.writerow([random.randint(1, N_TAGS), "place", pl])
+        w.writerow([random.randint(1, N_TAGS), pl])
+
+# ───────── 10c. TAG_USER_ASSIGNMENT ──────────
+with open("CSV/tag_user_assignment.csv", "w", newline="", encoding="utf8") as f:
+    w = csv.writer(f); w.writerow(["tag_id", "user_id"])
     for uid in random.sample(users_ids, 50):
-        w.writerow([random.randint(1, N_TAGS), "user", uid])
+        w.writerow([random.randint(1, N_TAGS), uid])
 
 # ────────────────────────────────────────────────────────────
 # 11. NOTIFICATIONS
@@ -489,12 +492,23 @@ with open("CSV/participation.csv","w",newline="",encoding="utf8") as f:
     for _ in range(180):
         w.writerow([random.choice(users),random.choice(events),random.choice(["interested","going"]),rand_ts()])
 
-# ───────── 10. TAG_ASSIGNMENT ──────────
-with open("CSV/tag_assignment.csv","w",newline="",encoding="utf8") as f:
-    w=csv.writer(f); w.writerow(["tag_id","target_type","target_id"])
-    for ev in events: w.writerow([random.randint(1,N_TAGS),"event",ev])
-    for pl in random.sample(places,10): w.writerow([random.randint(1,N_TAGS),"place",pl])
-    for uid in random.sample(users,50): w.writerow([random.randint(1,N_TAGS),"user",uid])
+# ───────── 10a. TAG_EVENT_ASSIGNMENT ──────────
+with open("CSV/tag_event_assignment.csv", "w", newline="", encoding="utf8") as f:
+    w = csv.writer(f); w.writerow(["tag_id", "event_id"])
+    for ev in events:
+        w.writerow([random.randint(1, N_TAGS), ev])
+
+# ───────── 10b. TAG_PLACE_ASSIGNMENT ──────────
+with open("CSV/tag_place_assignment.csv", "w", newline="", encoding="utf8") as f:
+    w = csv.writer(f); w.writerow(["tag_id", "place_id"])
+    for pl in random.sample(places, 10):
+        w.writerow([random.randint(1, N_TAGS), pl])
+
+# ───────── 10c. TAG_USER_ASSIGNMENT ──────────
+with open("CSV/tag_user_assignment.csv", "w", newline="", encoding="utf8") as f:
+    w = csv.writer(f); w.writerow(["tag_id", "user_id"])
+    for uid in random.sample(users, 50):
+        w.writerow([random.randint(1, N_TAGS), uid])
 
 # ───────── 11. NOTIFICATION ──────────
 notif_templates=[

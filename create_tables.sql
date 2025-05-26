@@ -200,8 +200,6 @@ FOR EACH ROW
 EXECUTE FUNCTION trg_check_subscription_active();
 
 
-DROP FUNCTION IF EXISTS trg_validate_tag_target();
-DROP TRIGGER IF EXISTS tg_check_tag_target ON tag_assignment;
 
 
 /* ================================================================
