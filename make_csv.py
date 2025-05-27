@@ -146,13 +146,21 @@ with open("CSV/tag.csv", "w", newline="", encoding="utf8") as f:
 with open("CSV/category.csv", "w", newline="", encoding="utf8") as f:
     w = csv.writer(f)
     w.writerow(["name", "parent_id"])
+    # Catégories principales
     w.writerows([
-        ["Sport", ""],  # id 1
-        ["Culture", ""],  # id 2
-        ["Endurance", 1],  # id 3
-        ["Musique", 2],  # id 4
-        ["Gaming", 2],  # id 5
-        ["Bien-être", 1],  # id 6
+        ["Sport", ""],      # id 1
+        ["Culture", ""],    # id 2
+        ["Loisir", ""],     # id 3
+        ["Bien-être", ""],  # id 4
+        ["Technologie", ""],# id 5
+        ["Gastronomie", ""] # id 6
+    ])
+    # Sous-catégories
+    w.writerows([
+        ["Endurance", 1], ["Musique", 2], ["Gaming", 2], ["Yoga", 4], ["Lecture", 2],
+        ["Peinture", 2], ["Fitness", 1], ["Danse", 1], ["Programmation", 5], ["Cuisine", 6],
+        ["Dégustation", 6], ["Photographie", 3], ["Randonnée", 1], ["Cinéma", 2], ["Artisanat", 3],
+        ["Relaxation", 4], ["Méditation", 4], ["Innovation", 5], ["Robotique", 5], ["Jeux de société", 3]
     ])
 
 with open("CSV/tag_category.csv", "w", newline="", encoding="utf8") as f:
@@ -430,8 +438,22 @@ with open("CSV/tag.csv","w",newline="",encoding="utf8") as f:
 
 with open("CSV/category.csv","w",newline="",encoding="utf8") as f:
     w=csv.writer(f); w.writerow(["name","parent_id"])
-    w.writerows([["Sport",""],["Culture",""]])
-    w.writerows([["Endurance",1],["Musique",2],["Gaming",2],["Bien-être",1]])
+    # Catégories principales
+    w.writerows([
+        ["Sport", ""],      # id 1
+        ["Culture", ""],    # id 2
+        ["Loisir", ""],     # id 3
+        ["Bien-être", ""],  # id 4
+        ["Technologie", ""],# id 5
+        ["Gastronomie", ""] # id 6
+    ])
+    # Sous-catégories
+    w.writerows([
+        ["Endurance", 1], ["Musique", 2], ["Gaming", 2], ["Yoga", 4], ["Lecture", 2],
+        ["Peinture", 2], ["Fitness", 1], ["Danse", 1], ["Programmation", 5], ["Cuisine", 6],
+        ["Dégustation", 6], ["Photographie", 3], ["Randonnée", 1], ["Cinéma", 2], ["Artisanat", 3],
+        ["Relaxation", 4], ["Méditation", 4], ["Innovation", 5], ["Robotique", 5], ["Jeux de société", 3]
+    ])
 
 with open("CSV/tag_category.csv","w",newline="",encoding="utf8") as f:
     w=csv.writer(f); w.writerow(["tag_id","category_id"])

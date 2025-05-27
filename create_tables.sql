@@ -3,8 +3,6 @@
    ========================= */
 CREATE TYPE like_value              AS ENUM ('like', 'nope');
 CREATE TYPE participation_state     AS ENUM ('interested', 'going');
-CREATE TYPE target_kind             AS ENUM ('user', 'event', 'place');
-
 CREATE TYPE gender_value            AS ENUM ('man', 'woman');
 CREATE TYPE orientation_value       AS ENUM ('heterosexual', 'other');
 CREATE TYPE provider_value AS ENUM ('facebook', 'instagram', 'X', 'linkedin', 'ticketmaster', 'snapchat', 'tiktok'); /*on aurait pu faire juste du TEXT mais le projet nous dit au moins deux réseau*/
@@ -54,8 +52,10 @@ CREATE TABLE subscription (
     sub_id     SERIAL PRIMARY KEY,
     user_id    INTEGER REFERENCES "user"(user_id) ON DELETE CASCADE,
     start_date DATE NOT NULL,
-    end_date   DATE
+    end_date   DATE,
+    UNIQUE (user_id, start_date, end_date)
 );
+
 
 CREATE TABLE social_account (
     sa_id                           SERIAL PRIMARY KEY,
